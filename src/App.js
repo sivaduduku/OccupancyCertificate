@@ -46,7 +46,7 @@ class App extends React.PureComponent {
     }
   }
 
-  onFileChange(e) {
+  onFileChange = (e)=> {
     this.setState({ filesCollection: e.target.files })
 }
 
