@@ -1,0 +1,2 @@
+export const UPDATE_FORM_SUCCESS = 'UPDATE_FORM_SUCCESS'
+export const CLEAR_FORM = 'CLEAR_FORM'
