@@ -38,7 +38,8 @@ class App extends React.PureComponent {
   }
 
   onChangeState = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+    this.setState({ [e.target.name]: e.target.value });
+    this.props.saveInfo(this.state);
   }
 
   render() {
