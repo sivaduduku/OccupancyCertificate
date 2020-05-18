@@ -3,33 +3,39 @@ import {updateFormData} from './actions';
 
 
 const mapInfo = (form) => {
- return {
-  tsbpass_permit_number: form.buildingPermitNo,
-  file_number: form.fileNo,
-  owner_name: form.ownerName,
-  email: form.email,
-  district: form.district,
-  zone_office: form.zone,
-  mandal: form.mandal,
-  usage_of_building: form.usageBuilding,
-  parking_provisions: form.parkingSpace,
-  rwh_pits: form.rwhPits,
-  building_permit_number: form.buildingPermit,
-  work_commence_date: form.workCommencedDate,
-  work_completion_date: form.workCompletionDate,
-  building_completion_due_date: form.completionBuilding,
-  building_permit_date: form.buildingPermitDate,
-  plot_number: form.plotNo,
-  sy_number: form.syNo,
-  mobile: form.mobile,
-  locality: form.locality,
-  circle_office: form.circleOffice,
-  village: form.village,
-  net_plot_area: form.netPlotArea,
-  affected_area_in_road_widening: form.affectedPortion,
-  tot_lot_area: form.totLotArea,
-  docs_verified_on: form.documentsverified
- }
+  var formdata = new FormData();
+  formdata.append("tsbpass_permit_number", form.buildingPermitNo);
+  formdata.append("file_number", form.fileNo);
+  formdata.append("owner_name", form.ownerName);
+  formdata.append("email", form.email);
+  formdata.append("district", form.district);
+  formdata.append("zone_office", form.zone);
+  formdata.append("mandal", form.mandal);
+  formdata.append("usage_of_building", form.usageBuilding);
+  formdata.append("parking_provisions", form.parkingSpace);
+  formdata.append("rwh_pits", form.rwhPits);
+  formdata.append("building_permit_number", form.buildingPermit);
+  formdata.append("work_commence_date", form.workCommencedDate);
+  formdata.append("work_completion_date", form.workCompletionDate);
+  formdata.append("building_completion_due_date", form.completionBuilding);
+  formdata.append("building_permit_date", form.buildingPermitDate);
+  formdata.append("plot_number", form.plotNo);
+  formdata.append("sy_number", form.syNo);
+  formdata.append("mobile", form.mobile);
+  formdata.append("locality", form.locality);
+  formdata.append("circle_office", form.circleOffice);
+  formdata.append("village", form.village);
+  formdata.append("net_plot_area", form.netPlotArea);
+  formdata.append("affected_area_in_road_widening", form.affectedPortion);
+  formdata.append("tot_lot_area", form.totLotArea);
+  formdata.append("docs_verified_on", form.documentsverified);
+  if(form.filesCollection && form.filesCollection.length > 0) {
+    for(let i = 0; i< form.filesCollection.length; i++) {
+      formdata.append("document", form.filesCollection[i], form.filesCollection[i].name);
+    } 
+  }
+  
+ return formdata
 }
 
 export const updateInfoThunk = form => (dispatch) => {
@@ -46,16 +52,14 @@ export const updateInfoThunk = form => (dispatch) => {
   
 
   export const executeApiFormPost = (data) => {
-    const options = {
-      method: 'POST',
-      url: 'http://13.233.190.35/api/v1/application_forms',
-      data: {},
+    const url = 'http://13.233.190.35/api/v1/application_forms';
+    const headers = {
       headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
       },
-    };
-    Object.assign(options, { data: JSON.stringify(data) });
-    return axios(options);
+    }
+    
+    return axios.post(url, data, headers);
   }
 
   export function checkStatus(error) {
