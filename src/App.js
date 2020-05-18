@@ -13,19 +13,30 @@ class App extends React.PureComponent {
     super(props);
     this.validator = new SimpleReactValidator();
     this.state ={
-
+      buildingPermitNo: 'yes',
+      disabled: false
     }
   }  
 
   componentDidMount() {
     const { form } = this.props;
+    const {buildingPermitNo} = this.state;
     this.setState({ ...form });
+    this.disabledControls(buildingPermitNo);
+  }
+
+  disabledControls = (buildingPermitNo) => {
+    if(buildingPermitNo === 'no') {
+    this.setState({disabled: true})
+    } else {
+      this.setState({disabled: false})
+    }
   }
 
   formClear = () => {
    const { clearInfo } = this.props;
    clearInfo();
-       window.location.reload();
+  window.location.reload();
   }
   submitForm = () => {
     if (this.validator.allValid()) {
@@ -38,11 +49,18 @@ class App extends React.PureComponent {
   }
 
   onChangeState = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value })
     this.props.saveInfo(this.state);
   }
 
+  buildingPermitChange = (e) => {
+    this.setState({ buildingPermitNo: e.target.value })
+    this.disabledControls(e.target.value);
+  }
+
   render() {
+    const { disabled } = this.state;
+    debugger;
     return (
       <div className="container">
       <div className="header">  
@@ -59,7 +77,7 @@ class App extends React.PureComponent {
               value="yes"
               name="buildingPermitNo"
               checked={this.state.buildingPermitNo === "yes"}
-              onChange={this.onChangeState}
+              onChange={this.buildingPermitChange}
             />
             yes
           </label>
@@ -69,7 +87,7 @@ class App extends React.PureComponent {
               value="no"
               name="buildingPermitNo"
               checked={this.state.buildingPermitNo === "no"}
-              onChange={this.onChangeState}
+              onChange={this.buildingPermitChange}
             />
             no
           </label>
@@ -78,58 +96,61 @@ class App extends React.PureComponent {
 
       <div className="form-group">
         <label>* Enter File No.</label>
-        <input className="form-control" value={this.state.fileNo} name="fileNo" onChange={this.onChangeState}/>
+        <input className="form-control" 
+        value={this.state.fileNo} name="fileNo" 
+        onChange={this.onChangeState} 
+        disabled = {disabled}/>
         {this.validator.message('fileNo', this.state.fileNo, 'required')}
       </div>
       <div className="form-group">
         <label>* Owner Name </label>
-        <input className="form-control" value={this.state.ownerName} name="ownerName" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.ownerName} name="ownerName" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('ownerName', this.state.ownerName, 'required')}
       </div>
       <div className="form-group">
         <label>* Email</label>
-        <input className="form-control" value={this.state.email} name="email" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.email} name="email" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('email', this.state.email, 'required|email')}
       </div>
       <div className="form-group">
         <label>* District</label>
-        <input className="form-control" value={this.state.district} name="district" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.district} name="district" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('district', this.state.district, 'required')}
       </div>
       <div className="form-group">
         <label>Zone Office</label>
-        <input className="form-control" value={this.state.zone} name="zone" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.zone} name="zone" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>Mandal</label>
-        <input className="form-control" value={this.state.mandal} name="mandal" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.mandal} name="mandal" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>* Usage of the Building</label>
-        <input className="form-control" value={this.state.usageBuilding} name="usageBuilding" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.usageBuilding} name="usageBuilding" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Usage of the Building', this.state.usageBuilding, 'required')}
       </div>
       <div className="form-group">
         <label>Parking Space Provisions</label>
-        <input className="form-control" value={this.state.parkingSpace} name="parkingSpace" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.parkingSpace} name="parkingSpace" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>RWH Pits (nos) </label>
-        <input className="form-control" value={this.state.rwhPits} name="rwhPits" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.rwhPits} name="rwhPits" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>* Building Permit No. </label>
-        <input className="form-control" value={this.state.buildingPermit} name="buildingPermit" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.buildingPermit} name="buildingPermit" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('buildingPermit', this.state.buildingPermit, 'required')}
       </div>
       <div className="form-group">
         <label>* Work Commenced Date: </label>
-        <input className="form-control" value={this.state.workCommencedDate} name="workCommencedDate" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.workCommencedDate} name="workCommencedDate" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Work Commenced Date', this.state.workCommencedDate, 'required')}
       </div>
       <div className="form-group">
         <label>* Due date for completion of the building </label>
-        <input type='date' className="form-control" value={this.state.completionBuilding} name="completionBuilding" onChange={this.onChangeState} />
+        <input type='date' className="form-control" value={this.state.completionBuilding} name="completionBuilding" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Due date for completion of the building', this.state.completionBuilding, 'required')}
       </div>
       </div>
@@ -137,57 +158,57 @@ class App extends React.PureComponent {
       <div className='col-lg-6'>
       <div className="form-group">
         <label>Plot No.</label>
-        <input className="form-control" value={this.state.plotNo} name="plotNo" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.plotNo} name="plotNo" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>Sy.No. </label>
-        <input className="form-control" value={this.state.syNo} name="syNo" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.syNo} name="syNo" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>* Mobile</label>
-        <input className="form-control" value={this.state.mobile} name="mobile" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.mobile} name="mobile" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('mobile', this.state.mobile, 'required|phone')}
       </div>
       <div className="form-group">
         <label>* Locality</label>
-        <input className="form-control" value={this.state.locality} name="locality" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.locality} name="locality" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('locality', this.state.locality, 'required')}
       </div>
       <div className="form-group">
         <label>Circle Office</label>
-        <input className="form-control" value={this.state.circleOffice} name="circleOffice" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.circleOffice} name="circleOffice" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>Village</label>
-        <input className="form-control" value={this.state.village} name="village" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.village} name="village" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>* Net Plot Area (Sq.mt)</label>
-        <input className="form-control" value={this.state.netPlotArea } name="netPlotArea" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.netPlotArea } name="netPlotArea" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Net Plot Area', this.state.netPlotArea, 'required')}
       </div>
       <div className="form-group">
         <label>Affected portion in Road Widening (if any)</label>
-        <input className="form-control" value={this.state.affectedPortion} name="affectedPortion" onChange={this.onChangeState}/>
+        <input className="form-control" value={this.state.affectedPortion} name="affectedPortion" onChange={this.onChangeState} disabled = {disabled}/>
       </div>
       <div className="form-group">
         <label>* Tot-lot area (m2) </label>
-        <input className="form-control" value={this.state.totLotArea} name="totLotArea" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.totLotArea} name="totLotArea" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Tot-lot area', this.state.totLotArea, 'required')}
       </div>
       <div className="form-group">
         <label>* Building Permit Date:  </label>
-        <input type='date' className="form-control" value={this.state.buildingPermitDate} name="buildingPermitDate" onChange={this.onChangeState} />
+        <input type='date' className="form-control" value={this.state.buildingPermitDate} name="buildingPermitDate" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Building Permit Date', this.state.buildingPermitDate, 'required')}
       </div>
       <div className="form-group">
         <label>* Work Completion Date: </label>
-        <input type='date' className="form-control" value={this.state.workCompletionDate} name="workCompletionDate" onChange={this.onChangeState} />
+        <input type='date' className="form-control" value={this.state.workCompletionDate} name="workCompletionDate" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Work Completion Date', this.state.workCompletionDate, 'required')}
       </div>
       <div className="form-group">
         <label>* Required </label>
-        <input className="form-control" value={this.state.required} name="required" onChange={this.onChangeState} />
+        <input className="form-control" value={this.state.required} name="required" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Required', this.state.required, 'required')}
       </div>
       </div>
@@ -199,7 +220,7 @@ class App extends React.PureComponent {
           <div className="col-lg-6">
                   <div className="form-group">
                 <label>Documents verified on</label>
-                <input className="form-control" value={this.state.documentsverified} name="documentsverified" onChange={this.onChangeState} />
+                <input className="form-control" value={this.state.documentsverified} name="documentsverified" onChange={this.onChangeState} disabled = {disabled}/>
               </div>
               <div className="form-group">
               <h6>Technical Aspects (Mandatory)</h6>
@@ -208,14 +229,20 @@ class App extends React.PureComponent {
       </div>
       <div className="row">
       <div className="form-group">
-              <input type="checkbox" defaultChecked={this.state.certified} name="certified" onChange={this.onChangeState} />
+              <input type="checkbox" defaultChecked={this.state.certified} name="certified" onChange={this.onChangeState} disabled = {disabled}/>
               Building completion notice to be certified by the Architect, Structural Engineer, Builder / Developer and Owner.
       </div>
       </div>
       <div className="row">
       <div className="form-group">
-              <input type="checkbox" defaultChecked={this.state.sanctioned} name="sanctioned" onChange={this.onChangeState} />
+              <input type="checkbox" defaultChecked={this.state.sanctioned} name="sanctioned" onChange={this.onChangeState} disabled = {disabled}/>
               Copy of sanctioned plan (If not pertains to the DPMS).
+      </div>
+      </div>
+      <div className="row">
+      <div className="form-group">
+      <label for="files">Select files:</label>
+           <input type="file" id="files" name="files" multiple disabled = {disabled}/>
       </div>
       </div>
       <button className="btn btn-primary" onClick={this.submitForm}>Save</button>
