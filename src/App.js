@@ -7,7 +7,6 @@ import { updateInfoThunk } from './thunk';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-
 class App extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -36,21 +35,23 @@ class App extends React.PureComponent {
   formClear = () => {
    const { clearInfo } = this.props;
    clearInfo();
-  window.location.reload();
+   window.location.reload();
   }
   submitForm = () => {
     if (this.validator.allValid()) {
       this.props.saveInfo(this.state);
-      alert('saved info')
      } else {
       this.validator.showMessages();
       this.forceUpdate()  ;
     }
   }
 
+  onFileChange(e) {
+    this.setState({ filesCollection: e.target.files })
+}
+
   onChangeState = (e) => {
     this.setState({ [e.target.name]: e.target.value })
-    this.props.saveInfo(this.state);
   }
 
   buildingPermitChange = (e) => {
@@ -144,7 +145,7 @@ class App extends React.PureComponent {
       </div>
       <div className="form-group">
         <label>* Work Commenced Date: </label>
-        <input className="form-control" value={this.state.workCommencedDate} name="workCommencedDate" onChange={this.onChangeState} disabled = {disabled}/>
+        <input type="date" className="form-control" value={this.state.workCommencedDate} name="workCommencedDate" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Work Commenced Date', this.state.workCommencedDate, 'required')}
       </div>
       <div className="form-group">
@@ -205,11 +206,6 @@ class App extends React.PureComponent {
         <input type='date' className="form-control" value={this.state.workCompletionDate} name="workCompletionDate" onChange={this.onChangeState} disabled = {disabled}/>
         {this.validator.message('Work Completion Date', this.state.workCompletionDate, 'required')}
       </div>
-      <div className="form-group">
-        <label>* Required </label>
-        <input className="form-control" value={this.state.required} name="required" onChange={this.onChangeState} disabled = {disabled}/>
-        {this.validator.message('Required', this.state.required, 'required')}
-      </div>
       </div>
       </div>
       <div className="header">  
@@ -219,7 +215,7 @@ class App extends React.PureComponent {
           <div className="col-lg-6">
                   <div className="form-group">
                 <label>Documents verified on</label>
-                <input className="form-control" value={this.state.documentsverified} name="documentsverified" onChange={this.onChangeState} disabled = {disabled}/>
+                <input type="date" className="form-control" value={this.state.documentsverified} name="documentsverified" onChange={this.onChangeState} disabled = {disabled}/>
               </div>
               <div className="form-group">
               <h6>Technical Aspects (Mandatory)</h6>
@@ -241,7 +237,9 @@ class App extends React.PureComponent {
       <div className="row">
       <div className="form-group">
       <label for="files">Select files:</label>
-           <input type="file" id="files" name="files" multiple disabled = {disabled}/>
+           <input type="file" id="files" name="filesCollection" 
+           onChange={this.onFileChange} 
+           multiple disabled = {disabled}/>
       </div>
       </div>
       <button className="btn btn-primary" onClick={this.submitForm}>Save</button>
@@ -261,6 +259,7 @@ const mapStateToProps = (state) => {
 export const mapDispatchToProps = dispatch => bindActionCreators({
   saveInfo: updateInfoThunk,
   clearInfo: clearFormData,
+  updateForm: updateFormData
 }, dispatch);
 
 
