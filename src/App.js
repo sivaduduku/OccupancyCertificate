@@ -60,7 +60,6 @@ class App extends React.PureComponent {
 
   render() {
     const { disabled } = this.state;
-    debugger;
     return (
       <div className="container">
       <div className="header">  
